@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ülesanne</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"></script>
+    <script>
+        let graaf;
+        function algus() {
+            graaf = cytoscape({
+                container: document.getElementById("kiht1"),
+                style: [{
+                    selector: 'node',
+                    style: { 'label': 'data(id)', 'background-color': 'red' }
+                }
+                ]
+            });
+            fetch("kohad.txt").then(vastus => vastus.text()).then(kuvaSolmed);
+
+
+        }
+        function kuvaSolmed(andmed) {
+            console.log(andmed);
+            read = andmed.split("\n");
+            for (let i = 0; i < read.length; i++) {
+                graaf.add([{ group: "nodes", data: { id: read[i].trim() } }]);
+            }
+            graaf.layout({ name: "circle" }).run();
+            fetch("teekonnad.txt").then(vastus => vastus.text()).then(kuvaSeosed);
+        }
+
+
+        function kuvaSeosed(andmed) {
+            console.log(andmed);
+            let read = andmed.split("\n");
+            for (let i = 0; i < read.length; i++) {
+                console.log(read);
+                let rida = read[i].split(",");
+                console.log(rida);
+                for (let i = 0; i < rida.length; i++) {
+                    graaf.add([{ group: "edges", data: { source: rida[0], target: rida[1] } }]);
+                }
+
+            }
+
+        }
+        function getInputValue() {
+            let inputVal = document.getElementById("kast2").value;
+            graaf.on("tap", "node", solmeVajutus);
+            dijkstra = graaf.elements().dijkstra("#" + inputVal);
+        }
+        function solmeVajutus(e) {
+            graaf.nodes().style("background-color", "red");
+            dijkstra.pathTo(e.target).style("background-color", "green");
+
+        }
+    </script>
+</head>
+
+<body onload="algus()">
+    <div id="kiht1" style="width: 400px; height: 300px; background-color: yellow"></div>
+    <input type="text" id="kast2" />
+    <input type="button" value="Sisesta linn, kuhu soovid teed näidata" onclick="getInputValue()" />
+</body>
+
+</html>

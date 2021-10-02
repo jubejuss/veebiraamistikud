@@ -1,0 +1,5 @@
+Tallinn,Keila,24
+Keila,Taebla,73
+Tallinn,Harutee,28
+Harutee,Taebla,55
+Taebla,Haapsalu,12

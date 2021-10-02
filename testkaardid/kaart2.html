@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="et">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markerid</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" />
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        img {
+            border: 0;
+        }
+
+        #kaardikiht {
+            float: bottom;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <script>
+        let markerid;
+        function algus() {
+            kaart = L.map('kaardikiht').setView([59.091206, 23.950195], 9);
+            new L.TileLayer(
+                'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{y}.png&ASUTUS=TLU&ERIALA=DIGIHUMANITAARIA', {
+                attribution: "Map: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+                tms: true,
+            }).addTo(kaart);
+            fetch("asukohad.txt").then(vastus => vastus.text()).then(kuvaMarkerid);
+
+        }
+        function kuvaMarkerid(andmed) {
+            console.log("andmed: " + andmed);
+            markerid = [];
+            let read = andmed.split("\n");
+            for (let i = 1; i < read.length; i++) {
+                let rida = read[i].split(",")
+                rida.push(L.marker([rida[0], rida[1]]));
+                markerid.push(rida);
+                rida[4].addTo(kaart);
+            }
+            console.log("markerid seespool" + markerid);
+
+
+
+        }
+        console.log("markerid väljaspool: " + markerid);
+
+
+
+
+    </script>
+</head>
+
+<body onload="algus()">
+    <div id="kaardikiht"></div>
+</body>
+
+</html>

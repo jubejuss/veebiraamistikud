@@ -1,0 +1,214 @@
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 980px;
+            padding: 1% 2%;
+            margin: 0 auto
+        }
+
+        #lat,
+        #lon {
+            text-align: right
+        }
+
+        #map {
+            width: 100%;
+            height: 50%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .address {
+            cursor: pointer
+        }
+
+        .address:hover {
+            color: #AA0000;
+            text-decoration: underline
+        }
+    </style>
+
+
+</head>
+
+<body onload="topMap()">
+    <h1 class="container" style="text-align: center;">Leia aadress ja lisa kaardile</h1>
+    <div id="map_layer" style="width:100%; height: 50vh"></div>
+    <div id="vastus" class="container"></div>
+
+    <!-- lisa -->
+    <div class="container">
+        <h2>Otsi sobiv aadress ja lisa kaardile</h2>
+        <b>Otsi aadressi</b>
+        <div id="search" style="margin-bottom: 15px;">
+            <input type="text" name="addr" value="" id="addr" size="58" />
+            <button type="button" onclick="addr_search();">Otsi</button>
+            <div id="results"></div>
+        </div>
+        <b>Koordinaadid</b>
+        <form>
+            <input type="text" name="lat" id="lat" size=12 value="">
+            <input type="text" name="lon" id="lon" size=12 value="">
+            <button type="button" onclick="addNewMarker();">Lisa kaardile</button>
+        </form>
+
+
+
+        <br />
+
+        <div id="map"></div>
+
+    </div>
+
+    <script type="text/javascript">
+        let mapOne;
+        let startlat = 59.438520;
+        let startlon = 24.726170;
+        let startPlace = L.latLng(startlat, startlon);
+        let markers = []
+        let lineLayer = null;
+
+        //proovin kõiki markereid pildile saada
+        //seda osa pean veel lahendama, hetkel ei tööta.
+        function getFeaturesInView() {
+            var features = [];
+            mapOne.eachLayer(function (layer) {
+                if (layer instanceof L.Marker) {
+                    if (mapOne.getBounds().contains(layer.getLatLng())) {
+                        features.push(layer.feature);
+                    }
+                }
+            });
+            return features;
+        }
+        //esimene kaardivaade
+        function topMap() {
+            mapOne = L.map('map_layer').setView(startPlace, 16);
+            new L.TileLayer(
+                'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{y}.png&ASUTUS=TLU&ERIALA=DIGIHUMANITAARIA', {
+                attribution: "Map: <a href='http://www.maaamet.ee/'>Maa-amet</a>",
+                tms: true,
+            }).addTo(mapOne);
+            lineLayer = L.layerGroup().addTo(mapOne);
+            markers.push(L.marker(startPlace, { draggable: true }).addTo(mapOne));
+            markers[markers.length - 1].on("move", showMapInfo);
+            mapOne.on("click", pushToMap);
+            console.log(startPlace);
+        }
+        function pushToMap(e) {
+            markers.push(L.marker(e.latlng, { draggable: true }).addTo(mapOne));
+            markers[markers.length - 1].on("move", showMapInfo);
+            showMapInfo();
+        }
+        //selle asemele sisestuskastist saadud andmed
+        function addNewMarker() {
+            let muudetudKoht = L.latLng(document.getElementById('lat').value, document.getElementById('lon').value);
+            console.log(muudetudKoht);
+            markers.push(L.marker(muudetudKoht, { draggable: true }).addTo(mapOne));
+            markers[markers.length - 1].on("move", showMapInfo);
+            showMapInfo();
+        }
+
+        function showMapInfo() {
+            let kokku = 0;
+            let s = "<h2>Vahemaad:</h2>";
+            for (let i = 1; i < markers.length; i++) {
+                let kaugus = mapOne.distance(markers[i].getLatLng(),
+                    markers[i - 1].getLatLng())
+                s += (kaugus / 1000).toFixed(1) + " km<br />";
+                kokku += kaugus;
+            }
+            s += "kokku: " + (kokku / 1000).toFixed(1) + " km.";
+            document.getElementById("vastus").innerHTML = s;
+            showLine();
+        }
+
+        function showLine() {
+            let asukohad = [];
+            for (let i = 0; i < markers.length; i++) {
+                asukohad.push(markers[i].getLatLng());
+            }
+            lineLayer.clearLayers();
+            L.polyline(asukohad).addTo(lineLayer);
+        }
+
+
+        // see paneb sisestuskastidesse vastavad numbrid 
+        document.getElementById('lat').value = startlat;
+        document.getElementById('lon').value = startlon;
+        //see on algne vaade
+        let map = L.map('map').setView(startPlace, 16);
+
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { attribution: 'OSM' }).addTo(map);
+
+        let myMarker = L.marker([startlat, startlon], {
+            title: "Koordinaadid", alt: "Koordinaadid", draggable: true
+        }).addTo(map).on('dragend', function () {
+            let lat = myMarker.getLatLng().lat.toFixed(8);
+            let lon = myMarker.getLatLng().lng.toFixed(8);
+            let czoom = map.getZoom();
+            if (czoom < 18) { nzoom = czoom + 2; } if (nzoom > 18) { nzoom = 18; }
+            if (czoom != 18) { map.setView([lat, lon], nzoom); } else { map.setView([lat, lon]); }
+            document.getElementById('lat').value = lat;
+            document.getElementById('lon').value = lon;
+            myMarker.bindPopup("Lat " + lat + "<br />Lon " + lon).openPopup();
+        });
+
+        function chooseAddr(lat1, lng1) {
+            myMarker.closePopup();
+            map.setView([lat1, lng1], 18);
+            myMarker.setLatLng([lat1, lng1]);
+            lat = lat1.toFixed(8);
+            lon = lng1.toFixed(8);
+            document.getElementById('lat').value = lat;
+            document.getElementById('lon').value = lon;
+            myMarker.bindPopup("Lat " + lat + "<br />Lon " + lon).openPopup();
+        }
+
+        function addAddress(arr) {
+            var out = "<br />";
+            var i;
+
+            if (arr.length > 0) {
+                for (i = 0; i < arr.length; i++) {
+                    out
+                        += "<div class='address' title='Show Location and Coordinates' onclick='chooseAddr(" + arr[i].lat + ", " +
+                        arr[i].lon + ");return false;'>" + arr[i].display_name + "</div>";
+                }
+                document.getElementById('results').innerHTML = out;
+            } else {
+                document.getElementById('results').innerHTML = "Sorry, no results...";
+            }
+        } function addr_search() {
+            var
+                inp = document.getElementById("addr"); var xmlhttp = new XMLHttpRequest(); var
+                    url = "https://nominatim.openstreetmap.org/search?format=json&limit=3&q=" + inp.value;
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var
+                        myArr = JSON.parse(this.responseText); addAddress(myArr);
+                }
+            }; xmlhttp.open("GET", url, true); xmlhttp.send();
+        }
+
+    </script>
+</body>
+
+</html>

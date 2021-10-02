@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Graaf</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"></script>
+  <script>
+    let graaf;
+    function algus() {
+      graaf = cytoscape({
+        container: document.getElementById("kiht1"),
+        elements: {
+          nodes: [
+            { data: { id: 'algus' } },
+            { data: { id: "keskpaik" } },
+            { data: { id: "keskpaik2" } },
+            { data: { id: "ots" } },
+            { data: { id: "yksik" } },
+            { data: { id: "kaasyksik" } }
+          ],
+          edges: [
+            { data: { source: "algus", target: "ots" } },
+            { data: { source: "ots", target: "keskpaik" } },
+            { data: { source: "keskpaik", target: "keskpaik2" } },
+            { data: { source: "keskpaik2", target: "algus" } },
+            { data: { source: "yksik", target: "kaasyksik" } }
+          ]
+        },
+        style: [{
+          selector: 'node',
+          style: { 'label': 'data(id)', 'background-color': 'red' }
+        }
+        ]
+      });
+      graaf.on("tap", "node", solmeVajutus);
+      dijkstra = graaf.elements().dijkstra("#algus");
+
+    }
+    function solmeVajutus(e) {
+      graaf.nodes().style("background-color", "red");
+      dijkstra.pathTo(e.target).style("background-color", "green");
+
+    }
+    function lisasolm() {
+      graaf.add([{ group: "nodes", data: { id: kast1.value } }]);
+      graaf.layout({ name: "circle" }).run();
+    }
+    function lisaseos() {
+      graaf.add([{ group: "edges", data: { source: kast2.value, target: kast3.value } }]);
+      graaf.layout({ name: "circle" }).run();
+    }
+  </script>
+</head>
+
+<body onload="algus()">
+  <div id="kiht1" style="width: 400px; height: 300px; background-color: yellow"></div>
+  <input type="text" id="kast1" />
+  <input type="button" value="Lisa sõlm" onclick="lisasolm()" /><br />
+  <input type="text" id="kast2" />
+  <input type="text" id="kast3" />
+  <input type="button" value="Lisa seos" onclick="lisaseos()" />
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+     <title>Graaf</title>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.9.4/cytoscape.min.js"></script>
+	 <script>
+	    let graaf;
+	    function algus(){
+		  graaf=cytoscape({
+		     container: document.getElementById("kiht1"),
+			 elements: {
+               nodes: [
+                    {data: {id: 'algus'}},
+                    {data: {id:"keskpaik"}},
+                    {data: {id:"ots"}},
+                    {data: {id:"yksik"}},
+                    {data: {id:"kaasyksik"}}
+                ],
+                edges: [
+                    {data: {source:"algus",target:"keskpaik"}},
+                    {data: {source:"keskpaik",target:"ots"}},
+                    {data: {source:"yksik",target:"kaasyksik"}}
+                ]
+			 },
+			 style: [{selector: 'node', 
+                         style:{'label': 'data(id)', 'background-color': 'red'}}
+                        ]
+          });
+          graaf.on("tap", "node", solmeVajutus);
+          
+        }
+        function solmeVajutus(e){
+            console.log(e.target.id());
+            otsing=graaf.elements().bfs({roots:"#"+e.target.id(),directed:false});
+          // otsing.path.select();
+          graaf.nodes().style("background-color","red");
+          otsing.path.style("background-color","blue");
+          for(let i=0; i<otsing.path.length; i++){
+              console.log(otsing.path[i].id());
+          }
+        }
+        function lisasolm(){
+            graaf.add([{group:"nodes",data:{id:kast1.value}}]);
+            graaf.layout({name:"circle"}).run();
+        }
+        function lisaseos(){
+            graaf.add([{group:"edges",data:{source:kast2.value, target:kast3.value}}]);
+            graaf.layout({name:"circle"}).run();
+        }
+	 </script>
+  </head>
+  <body onload="algus()">
+    <div id="kiht1" style="width: 400px; height: 300px; background-color: yellow"></div>
+    <input type="text" id="kast1" />
+    <input type="button" value="Lisa sõlm" onclick="lisasolm()" /><br />
+    <input type="text" id="kast2" />
+    <input type="text" id="kast3" />
+    <input type="button" value="Lisa seos" onclick="lisaseos()" />
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" />
+
+    <script>
+        let kaart;
+        let alguskoht = L.latLng(59.438520, 24.726170);
+        //siis võiks panna võimaluse, et laiuse ja pikkus ta võtab siit: https://www.latlong.net/convert-address-to-lat-long.html
+        let algusmarker = null, lopumarker = null;
+
+        function algus() {
+            kaart = L.map('kaardikiht').setView(alguskoht, 16);
+            new L.TileLayer(
+                'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{y}.png&ASUTUS=TLU&ERIALA=DIGIHUMANITAARIA', {
+                attribution: "Map: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+                tms: true,
+            }).addTo(kaart);
+            algusmarker = L.marker(alguskoht, { draggable: true }).addTo(kaart);
+            lopumarker = L.marker(alguskoht, { draggable: true }).addTo(kaart);
+            algusmarker.on("move", kuvaAndmed);
+            lopumarker.on("move", kuvaAndmed);
+            kuvaAndmed();
+        }
+        function kuvaAndmed() {
+            //Kuvage eraldi algus- ja lõpumarkeri laius- ja pikkuskraad
+            document.getElementById("vastus").innerHTML =
+                "Kohast laiuskraad: " + algusmarker.getLatLng().lat.toFixed(4) + ", " +
+                "pikkuskraad: " + algusmarker.getLatLng().lng.toFixed(4) + "<br />" +
+                "kohta laiuskraad: " + lopumarker.getLatLng().lat.toFixed(4) + ", " +
+                "pikkuskraad: " + lopumarker.getLatLng().lng.toFixed(4) + "<br />" +
+                "Kaugus linnulennult: " +
+                (kaart.distance(algusmarker.getLatLng(), lopumarker.getLatLng()) / 1000).
+                    toFixed(1) + " km.";
+        }
+    </script>
+</head>
+
+<body onload="algus()">
+    <div id="kaardikiht" style="width:100%; height: 80vh"></div>
+    <div id="vastus"></div>
+</body>
+
+</html>

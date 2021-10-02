@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Kaart</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" />
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+    }
+
+    img {
+      border: 0;
+    }
+
+    #kaardikiht {
+      float: bottom;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <script>
+    var kaart;
+    var hypik;
+    var marker1;
+    function algus() {
+      kaart = L.map('kaardikiht').setView([59.091206, 23.950195], 9); // muudan koordinaate ja siis muutub ka asukoht avanedes -->
+      new L.TileLayer(
+        'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{y}.png&ASUTUS=TLU&ERIALA=DIGIHUMANITAARIA', {
+        attribution: "Map: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+        tms: true,
+      }).addTo(kaart);
+      hypik = L.popup();
+      kaart.on("click", vajutus);
+      marker1 = L.marker([58.93571, 23.554065]);
+      L.marker([58.935531, 23.541828]).addTo(kaart);
+      L.circle([58.935531, 23.541828], { radius: 50, color: "yellow", weight: 1 }).addTo(kaart).bindPopup("Kooliala");
+      L.rectangle([[58.909369, 23.420749], [58.908281, 23.42607]]).addTo(kaart).bindPopup("Sadam");
+    }
+    function vajutus(e) {
+      hypik.setLatLng(e.latlng).
+        setContent("Vajutasid " + e.latlng.toString()).openOn(kaart);
+      // L.marker(e.lating).addTo(kaart);
+    }
+    function lisa() {
+      marker1.addTo(kaart);
+    }
+    function eemalda() {
+      marker1.remove();
+    }
+  </script>
+</head>
+
+<body onload="algus()">
+  <h1>Väljavõte Eesti kaardist</h1>
+  <div id="kaardikiht"></div>
+  <input type="button" value="Lisa marker" onclick="lisa()" />
+  <input type="button" value="Eemalda marker" onclick="eemalda()" />
+</body>
+
+</html>

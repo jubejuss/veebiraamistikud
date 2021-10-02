@@ -1,0 +1,6 @@
+pohjalaius,idapikkus,tyyp,kirjeldus
+58.948301,23.545074,kool,Haapsalu Kolledž
+59.438611,24.771389,kool,TLÜ peamaja
+59.438517,24.726244,kodu,Minu kodu
+58.994675,22.787747,kodu,Kõlu talu
+58.128125,27.474318,kodu,Ritska
