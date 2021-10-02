@@ -1,7 +1,8 @@
 # Veebiraamistikud
 ## I Loeng
 ### Leaflet
-[leaflet](https://leafletjs.com)
+<a href="https://leafletjs.com" target="_blank">Leaflet</a>
+
 ### Cytoscape
 [Cytoscape](https://js.cytoscape.org)
 ### Dijkstra
