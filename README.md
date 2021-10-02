@@ -8,3 +8,7 @@
 ### Dijkstra
 [Dijkstra](https://js.cytoscape.org/#eles.dijkstra)
 ## II Loeng
+### joonised
+### Chart.js
+lk 155  
+### andmed

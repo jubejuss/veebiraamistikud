@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Ilmaandmete tutvustus</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+	<script>
+		let m;
+		fetch("harkutund.txt").then(yhendus => yhendus.text()).
+			then(sisu => {
+				m = sisu.split("\n").map(rida => rida.split(","));
+				m.shift();
+				let uued = [];
+				for (let i = 0; i < m.length; i++) {
+					m[i][0] = parseInt(m[i][0]);
+					m[i][1] = parseInt(m[i][1]);
+					m[i][2] = parseInt(m[i][2].split(":")[0]);
+					let puudu = false;
+					for (let j = 3; j < 11; j++) {
+						m[i][j] = parseFloat(m[i][j]);
+						if (isNaN(m[i][j])) { puudu = true; }
+					}
+					if (!puudu) { uued.push(m[i]); }
+				}
+				m = uued;
+				tootle();
+			});
+
+		function tootle() {
+			let temperatuurid = m.map(rida => rida[5]);
+			console.log(_.sum(temperatuurid));
+			console.log(_.sum(temperatuurid) / temperatuurid.length);
+			console.log((_.sum(temperatuurid) / temperatuurid.length).toFixed(2));
+			temperatuuridKuudeKaupa();
+		}
+
+		function temperatuuridKuudeKaupa() {
+			kt = _.range(13).map(element => []);
+			console.log(kt);
+			m.forEach(rida => kt[rida[0]].push(rida[5]));
+			ks = kt.map(kuu => _.sum(kuu));
+			kk = kt.map(kuu => _.sum(kuu) / kuu.length);
+			kk.shift();
+			console.log(kk);
+			joonis = new Chart(document.getElementById("joonisekiht"), {
+				type: 'bar',
+				data: {
+					labels: _.range(1, 13),
+					datasets: [
+						{
+							label: 'Andmed', //leia võimalus, kuidas lugeda labelid tekstis ja siia panna
+							data: kk,
+							backgroundColor: "red"
+						}
+
+					]
+				}
+			});
+		}
+
+		//võimaldage kasutajhal valida, ks näidatakse kuu keskmisi temperatuure
+		//või keskmist tuule kiirust
+	</script>
+</head>
+
+<body>
+	<div style="width: 400px; height:300px">
+		<canvas id="joonisekiht"></canvas>
+	</div>
+</body>
+
+</html>

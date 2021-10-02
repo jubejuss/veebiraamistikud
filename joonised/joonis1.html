@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joonised</title>
+    <script>
+        /* function algus() {
+            let t = document.getElementById("tahvel");
+            let g = t.getContext("2d");
+            g.fillRect(10, 20, 30, 40);
+            g.beginPath();
+            g.moveTo(10, 50);
+            g.lineTo(150, 50);
+            g.lineTo(150, 100);
+            g.arc(200, 100, 30, 0, 2 * Math.PI, true);
+            g.stroke(); //joonistuskäsklus
+        } */
+        //pange joonistatava kriipsu pikkus sõltuma tekstivälja väärtusest
+        //Kuvage ekraanil kolm tekstivälja
+        //igaühte sisestage inimese pikkus
+        //kuvage iga iinimest iseloomustav lihtne kriipsujuku
+        function algus() {
+            let t = document.getElementById("tahvel");
+            let beginPoint = document.getElementById(first_box).value;
+            let g = t.getContext("2d");
+            g.fillRect(10, 20, 30, 40);
+            g.beginPath();
+            g.moveTo(10, 50);
+            g.lineTo(150, 50);
+            g.lineTo(150, 100);
+            g.stroke(); //joonistuskäsklus
+        }
+    </script>
+</head>
+
+<body onload="algus(), firstFigure()">
+    <!-- canvas on jooniste jaoks hea, vaata canvase dokusid-->
+    <canvas id="tahvel" width="400" height="300"></canvas>
+    <input type="text" id="first_box" size=12 value="">
+    <input type="text" id="second_box" size=12 value="">
+    <input type="text" id="third_box" size=12 value="">
+
+</body>
+
+</html>

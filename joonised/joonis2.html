@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+
+<head>
+    <script>
+        let t, g;
+        function algus() {
+            t = document.getElementById("tahvel");
+            console.log(t.height);
+            g = t.getContext("2d");
+            g.beginPath();
+            g.lineTo(50, 50);
+            g.lineTo(50, 150);
+            g.moveTo(20, 80);
+            g.lineTo(80, 80);
+            g.moveTo(20, 230);
+            g.lineTo(50, 150);
+            g.lineTo(80, 230);
+            g.stroke();
+            g.beginPath();
+            g.stroke();
+            g.beginPath();
+            g.arc(50, 40, 10, 0, 2 * Math.PI, true); //x,y, raadius
+            g.stroke();
+        }
+        function vajutus1() {
+            g.clearRect(20, 300, 80, 300);
+            let arv1 = parseInt(document.getElementById("kast1").value)
+            let bottom = t.height;
+            g.beginPath();
+            g.moveTo(50, 200);
+            g.lineTo(50, 200 - arv1);
+            g.stroke();
+            g.beginPath();
+            g.arc(50, 190 - arv1, 10, 0, 2 * Math.PI, true); //x,y, raadius
+            g.stroke();
+            g.beginPath();
+            g.lineTo(20, 250 - arv1);
+            g.lineTo(50, 205 - arv1);
+            g.lineTo(80, 250 - arv1);
+            g.moveTo(20, bottom + 50);
+            g.lineTo(50, 200);
+            g.lineTo(80, bottom + 50);
+            g.stroke();
+
+        }
+        function vajutus2() {
+            g.clearRect(100, 300, 130, 300);
+            let arv1 = parseInt(document.getElementById("kast2").value)
+            let bottom = t.height;
+            g.beginPath();
+            g.moveTo(100, 200);
+            g.lineTo(100, 200 - arv1);
+            g.stroke();
+            g.beginPath();
+            g.arc(100, 190 - arv1, 10, 0, 2 * Math.PI, true); //x,y, raadius
+            g.stroke();
+            g.beginPath();
+            g.lineTo(70, 250 - arv1);
+            g.lineTo(100, 205 - arv1);
+            g.lineTo(130, 250 - arv1);
+            g.moveTo(70, bottom + 50);
+            g.lineTo(100, 200);
+            g.lineTo(130, bottom + 50);
+            g.stroke();
+        }
+        function vajutus3() {
+            g.clearRect(130, 0, 180, 300);
+            let arv1 = parseInt(document.getElementById("kast3").value)
+            let bottom = t.height;
+            g.beginPath();
+            g.moveTo(150, 200);
+            g.lineTo(150, 200 - arv1);
+            g.stroke();
+            g.beginPath();
+            g.arc(150, 190 - arv1, 10, 0, 2 * Math.PI, true); //x,y, raadius
+            g.stroke();
+            g.beginPath();
+            g.lineTo(120, 250 - arv1);
+            g.lineTo(150, 205 - arv1);
+            g.lineTo(180, 250 - arv1);
+            g.moveTo(120, bottom + 50);
+            g.lineTo(150, 200);
+            g.lineTo(180, bottom + 50);
+            g.stroke();
+        }
+	   //pange joonistatava kriipsu pikkus sõltuma tekstivälja väärtusest
+	   //kuvage ekraanil kolm tekstivälja
+	   //igaühte sisestage inimese pikkus
+	   //kuvage iga inimest iseloomustav lihtne kriipsujuku
+    </script>
+</head>
+
+<body onload="algus()">
+    <canvas id="tahvel" width="400" height="300"></canvas><br />
+    <input type="number" id="kast1" />
+    <input type="button" value="Joonista" onclick="vajutus1()" />
+    <input type="number" id="kast2" />
+    <input type="button" value="Joonista" onclick="vajutus2()" />
+    <input type="number" id="kast3" />
+    <input type="button" value="Joonista" onclick="vajutus3()" />
+</body>
+
+</html>

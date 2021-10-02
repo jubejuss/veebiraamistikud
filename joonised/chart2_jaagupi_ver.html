@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Joonis</title>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+        let joonis;
+        function algus() {
+            joonis = new Chart(document.getElementById("joonisekiht"), {
+                type: 'bar',
+                data: {
+                    labels: ['Juku', 'Kati', 'Mati'],
+                    datasets: [
+                        {
+                            label: 'isikud',
+                            data: [170, 175, 172],
+                            backgroundColor: "yellow"
+                        }
+
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [
+                            { ticks: { beginAtZero: true } }
+                        ]
+                    }
+                }
+
+            })
+        }
+        function vajutus1() {
+            let m = kast1.value.split(" ");
+            //joonis.data.labels=m;
+            //joonis.data.datasets[0].data=m.map(function(sona){return sona.length});
+            //pikem versioon
+            joonis.data.labels = [];
+            joonis.data.datasets[0].data = [];
+            for (let i = 0; i < m.length; i++) {
+                joonis.data.labels.push(m[i]);
+                joonis.data.datasets[0].data.push(m[i].length);
+            }
+            joonis.update();
+        }
+
+	  //Looge uus leht koos tulpdiagrammi ja tekstiaknaga
+	  //Sisestatud lause iga sõna tarbeks kuvatakse joonisele tulp vastava sõna tähtede arvuga
+
+	  //Sisestatakse tekst. Tulpadena näidatakse, mitu mitmetähelist sõna on tekstis
+
+    </script>
+</head>
+
+<body onload="algus()">
+    <div style="width: 400px; height:300px">
+        <canvas id="joonisekiht"></canvas>
+    </div>
+    <input type="text" id="kast1" placeholder="tekst" onkeyup="vajutus1()" />
+
+    <input type="button" value="Lisa" onclick="vajutus1()" />
+</body>
+
+</html>

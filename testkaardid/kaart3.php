@@ -76,7 +76,7 @@
 </head>
 <body onload="algus()">
     <div id="kaardikiht"></div>
-    <input type="checkbox" id="cbkool" checked="checked" onchange="kuvaMarkerid()"/>Kooli kohad<br />
+    <input type="checkbox" id="cbkool" checked="checked" onchange="kuvaMarkerid()"/>Kooli kohadddd<br />
     <input type="checkbox" id="cbkodu" onchange="kuvaMarkerid()"/>Kodu kohad<br />
     <div id="kiht2"></div>
     <form action="salvestus.php">

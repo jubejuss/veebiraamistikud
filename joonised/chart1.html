@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Joonis</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+        let joonis;
+        function algus() {
+            joonis = new Chart(document.getElementById("joonisekiht"), {
+                type: 'bar',
+                data: {
+                    labels: ['Juku', 'Kati', 'Mati'],
+                    datasets: [{
+                        label: 'isikud',
+                        data: [170, 165, 172],
+                        backgroundColor: 'orange'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        yAxes: [{
+                            ticks: { beginAtZero: true }
+                        }]
+                    }
+                }
+
+
+            })
+        }
+        function vajutus1() {
+            joonis.data.labels.push(kast1.value);
+            joonis.data.datasets[0].data.push(parseInt(kast2.value));
+            joonis.update();
+        }
+        //luua uus leht koos tulpdiagrammiga ja tekstiaknaga
+        //sisestatud lause iga sõna tarbeks kuvatakse
+        //joonisele tulp vastava sõna tähtede arvuga
+
+        //Sisestatakse tekst. Tulpadena näidatakse mitu mitmetähelist sõna on tekstis
+    </script>
+
+</head>
+
+<body onload="algus()">
+    <canvas id="joonisekiht" style="width: 400px; height:300px;"></canvas><br />
+    <input type="text" id="kast1" placeholder="eesnimi">
+    <input type="text" id="kast2" placeholder="pikkus">
+    <input type="button" value="Lisa" onclick="vajutus1()">
+</body>
+
+</html>
