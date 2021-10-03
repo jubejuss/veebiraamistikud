@@ -31,10 +31,32 @@
 
         function tootle() {
             let temperatuurid = m.map(rida => rida[5]);
-            //console.log(_.sum([2, 5, 4]));
+            //Lodash
             console.log(_.sum(temperatuurid));
             console.log(_.sum(temperatuurid) / temperatuurid.length);
             console.log((_.sum(temperatuurid) / temperatuurid.length).toFixed(2));
+
+            let arr = temperatuurid;
+            let sum = _.sum(arr);
+            console.log("lodashi summa: " + sum);
+            //sisse eshitatud rehkendamine
+            const summ = (previousValue, currentValue) => previousValue + currentValue; //prev ja current on muutujad, ise võin valida
+            let summm = (temperatuurid.reduce(summ)).toFixed(2);
+            console.log("Summa: " + (temperatuurid.reduce(summ)).toFixed(2));
+
+            const max = Math.max(...temperatuurid);
+            console.log("maksimaalne: " + max)
+
+            const min = Math.min(...temperatuurid);
+            console.log("minimaalne: " + min)
+
+            let avg = (summm / temperatuurid.length).toFixed(2);
+            console.log("Keskmine: " + avg)
+            console.log(temperatuurid.length);
+
+
+
+
             temperatuuridKuudeKaupa();
         }
 
@@ -45,7 +67,7 @@
             ks = kt.map(kuu => _.sum(kuu));
             kk = kt.map(kuu => _.sum(kuu) / kuu.length);
 
-            console.log(kk);
+            console.log("KK: " + kk);
         }
     </script>
 </head>
