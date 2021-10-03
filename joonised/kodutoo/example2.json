@@ -1,0 +1,28 @@
+[
+  {
+    "LastStatisticsDate": "2021-10-02",
+    "StatisticsDate": "2020-02-05",
+    "Country": "Eesti",
+    "CountryEHAK": "233",
+    "County": "Harju maakond",
+    "CountyEHAK": "0037",
+    "ResultValue": "N",
+    "DailyTests": 1,
+    "TotalTests": 1,
+    "DailyCases": 1,
+    "TotalCases": 1
+  },
+  {
+    "LastStatisticsDate": "2021-10-02",
+    "StatisticsDate": "2020-02-05",
+    "Country": "Eesti",
+    "CountryEHAK": "233",
+    "County": "Harju maakond",
+    "CountyEHAK": "0037",
+    "ResultValue": "P",
+    "DailyTests": 0,
+    "TotalTests": 0,
+    "DailyCases": 0,
+    "TotalCases": 0
+  }
+]

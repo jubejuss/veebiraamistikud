@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="et">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koroonaandmestik</title>
+    <script>
+        let m;
+        fetch("example.json", {
+            mode: "no-cors",
+        })
+            .then(connection => connection.json())
+            .then(content => {
+
+                content = content + ''; //thios is needable, otherwise javascript thinks, that data is something else than string
+                console.log(content);
+                m = content.split("\n").map(row => {
+                    row.split(",");
+                });
+                console.log(m);
+            });
+
+
+        /*fetch("example.json", {
+        mode: "no-cors",
+        method: "GET",
+        headers: {
+            "Content- Type": "application/ json"
+        }
+        })*/
+
+
+
+        //avan json faili
+        const request = new XMLHttpRequest();
+        request.open("GET", "example.json", false);
+        //avatud
+        request.send(null);
+        //const json = "jsonformatter.json";
+        const obj = JSON.parse(request.responseText);
+        console.log(obj);
+
+
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
