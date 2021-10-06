@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        fetch("example.json")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                const testSittList = data;
+                //ver1
+                testSittList.forEach(element => {
+                    console.log("Moodne: " + element.ResultValue);
+                });
+                //ver2
+                for (let i = 0; i < testSittList.length; i++) {
+                    let obj = testSittList[i];
+                    console.log("Vanamoodne: " + obj.ResultValue);
+                };
+                //ver3
+                testSittList.forEach(function (ykskoikmisnimi) {
+                    console.log("NAtuke vähemmoodne: " + ykskoikmisnimi.ResultValue);
+                });
+
+
+            })
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="et">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koroonaandmestik</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function getData() {
+            const url = `https://api.allorigins.win/get?url=${encodeURIComponent('https://jubejuss.ee/andmekatsed/example.json')}`;
+            const response = fetch(url, {
+                method: 'GET',
+            })
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data.contents);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        };
+        getData();
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
