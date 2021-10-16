@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Ilmaandmete tutvustus</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js"></script>
+    <script>
+        let m;
+        fetch("example.txt").then(yhendus => yhendus.text()).
+            then(sisu => {
+                console.log(sisu);
+                m = sisu.split("\n").map(rida => rida.split(","));
+                m.shift(); //eemaldan pealkirjarea
+                let uued = [];
+                for (let i = 0; i < m.length; i++) {
+                    m[i][2] = parseInt(m[i][2]);
+                    m[i][3] = parseInt(m[i][3]);
+                    m[i][4] = parseInt(m[i][4]);
+                    m[i][5] = parseInt(m[i][5]);
+                    uued.push(m[i]);
+                }
+                console.log(m[1]);
+                m = uued;
+                console.log("uued: " + m);
+                tootle();
+            });
+
+        function tootle() {
+            let temperatuurid = m.map(rida => rida[3]);
+            //Lodash
+            console.log(_.sum(temperatuurid));
+            console.log(_.sum(temperatuurid) / temperatuurid.length);
+            console.log((_.sum(temperatuurid) / temperatuurid.length).toFixed(2));
+
+            let arr = temperatuurid;
+            let sum = _.sum(arr);
+            console.log("lodashi summa: " + sum);
+            //sisse eshitatud rehkendamine
+            const summ = (previousValue, currentValue) => previousValue + currentValue; //prev ja current on muutujad, ise võin valida
+            let summm = (temperatuurid.reduce(summ)).toFixed(2);
+            console.log("Summa: " + (temperatuurid.reduce(summ)).toFixed(2));
+
+            const max = Math.max(...temperatuurid);
+            console.log("maksimaalne: " + max)
+
+            const min = Math.min(...temperatuurid);
+            console.log("minimaalne: " + min)
+
+            let avg = (summm / temperatuurid.length).toFixed(2);
+            console.log("Keskmine: " + avg)
+            console.log(temperatuurid.length);
+
+
+
+
+            temperatuuridKuudeKaupa();
+        }
+
+        function temperatuuridKuudeKaupa() {
+            kt = _.range(13).map(element => []);
+            console.log(kt);
+            m.forEach(rida => kt[rida[0]].push(rida[5]));
+            ks = kt.map(kuu => _.sum(kuu));
+            kk = kt.map(kuu => _.sum(kuu) / kuu.length);
+
+            console.log("KK: " + kk);
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

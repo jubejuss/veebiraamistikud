@@ -14,7 +14,7 @@
             .then(connection => connection.json())
             .then(content => {
 
-                content = content + ''; //thios is needable, otherwise javascript thinks, that data is something else than string
+                content = content + ''; //this is needable, otherwise javascript thinks, that data is something else than string
                 console.log(content);
                 m = content.split("\n").map(row => {
                     row.split(",");

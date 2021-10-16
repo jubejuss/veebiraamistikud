@@ -15,21 +15,9 @@
             .then(data => {
                 console.log(data)
                 const testSittList = data;
-                //ver1
                 testSittList.forEach(element => {
-                    console.log("Moodne: " + element.ResultValue);
+                    console.log("Tulemus: " + element.DailyTests);
                 });
-                //ver2
-                for (let i = 0; i < testSittList.length; i++) {
-                    let obj = testSittList[i];
-                    console.log("Vanamoodne: " + obj.ResultValue);
-                };
-                //ver3
-                testSittList.forEach(function (ykskoikmisnimi) {
-                    console.log("Natuke vähemmoodne: " + ykskoikmisnimi.ResultValue);
-                });
-
-
             })
 
     </script>

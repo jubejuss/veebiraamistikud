@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="et">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kodutöö</title>
+    <script>
+        let m;
+        fetch("example.txt").then(connection => connection.text())
+            .then(data => {
+                console.log(data);
+                m = data.split("\n") //jagan massiiviks reavahega
+                    .map(row => row.split(",")) //siit omakorda splitin pisikesteks massiivideks komakohaga
+                console.log(m);
+                //eemaldame m massiivist esimese rea – shift
+                m.shift();
+                let missing = []; //puuduvate andmete massiiv
+
+                let miss = false;
+                let dataExists = [];
+                //alljärgnev lihtsalt parseb asjad kas täisarvudeks või komakohtadeks
+                for (let i = 0; i < m.length; i++) {
+                    m[i][2] = parseInt(m[i][2]);
+                    m[i][3] = parseInt(m[i][3]);
+                    m[i][4] = parseInt(m[i][4]);
+                    m[i][5] = parseFloat(m[i][5]);
+                    if (isNaN(m[i])) { miss = true; }
+                    if (miss) { missing.push(i); }
+                    if (!miss) { dataExists.push(m[i]); }
+                }
+                m = dataExists;
+                console.log("uued: " + m);
+                console.log("Missing: " + missing);
+                console.log(m[5]); //näitab viiendat rida
+                dataProcess();
+            });
+        function dataProcess() {
+            let TotalCases = m.map(row => row[3]); // see summeerib
+            console.log("Total caces: " + TotalCases);
+
+            const max = Math.max(...TotalCases);
+            console.log("maksimaalne: " + max)
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

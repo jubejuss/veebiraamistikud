@@ -29,23 +29,23 @@
 
 		function temperatuuridKuudeKaupa() {
 			kt = _.range(13).map(element => []);
-			console.log(kt);
+			console.log("kt: " + kt);
 			let metric;
 			windOrTemp = document.getElementById("choose").value;
-			console.log(windOrTemp);
+			console.log("windOrTemp: " + windOrTemp);
 
 			if (windOrTemp == "wind") {
 				metric = 10;
 			} else {
 				metric = 5;
 			};
-			console.log(metric);
+			console.log("metric: " + metric);
 
 			m.forEach(rida => kt[rida[0]].push(rida[metric]));
 			ks = kt.map(kuu => _.sum(kuu));
 			kk = kt.map(kuu => _.sum(kuu) / kuu.length);
 			kk.shift();
-			console.log(kk);
+			console.log("kk: " + kk);
 			joonis = new Chart(document.getElementById("joonisekiht"), {
 				type: 'bar',
 				data: {
