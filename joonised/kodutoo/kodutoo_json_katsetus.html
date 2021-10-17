@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Terviseamtei avaandmed</title>
+
+    <script>
+
+        (async () => {
+            async function getRepos() {
+                //const url = `https://api.github.com/users/jameshibbard/repos`;
+                const url = "example.json";
+                const response = await fetch(url);
+                const repositories = await response.json();
+                return repositories;
+            }
+            const repos = await getRepos();
+            console.log(repos);
+            //juhend: https://dev.to/ljnce/map-foreach-for-three-ways-for-create-an-array-and-push-it-4893
+
+            //uus massiv 1
+            let newRepoOne = repos.map(function (repo) {
+                return repo.PerPopulation;
+            })
+            console.log(newRepoOne);
+
+
+
+            let newRepoTwo = [];
+            repos.forEach((repo) => {
+                /* console.log(`jameshibbard repo with name ${repo.name} has ${repo.stargazers_count} stars`); */
+                newRepoTwo.push(repo.PerPopulation) //uus massiiv 2
+            });
+            console.log(newRepoTwo);
+
+            //uus massiiv 3
+            let newRepoThree = [];
+            for (let i = 0; i < repos.length; i++) {
+                newRepoThree.push(repos[i].PerPopulation);
+            }
+            console.log(newRepoThree);
+
+
+
+        })();
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

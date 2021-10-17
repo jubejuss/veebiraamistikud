@@ -1,0 +1,16 @@
+{
+  "jsonarray": [
+    {
+      "name": "Juss",
+      "age": 4
+    },
+    {
+      "name": "Joe",
+      "age": 12
+    },
+    {
+      "name": "Tom",
+      "age": 14
+    }
+  ]
+}

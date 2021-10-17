@@ -6,12 +6,11 @@
 
     <script>
         let m = [];
-        fetch("example.csv").then(connection => connection.text()).
+        fetch("example.csv")
+            .then(response => response.text()).
             then(data => {
-                //console.log("data: " + data);
                 m = data.split("\n").filter(el => el != null && el != '').map(row => row.split(","));
-                m.shift(); //splitin read, eemaldan, ehk filterdan tühjad read,eemaldan pealkirjarea
-                //console.log("m: " + m);
+                m.shift();
 
                 let uued = [];
                 for (let i = 0; i < m.length; i++) {
@@ -29,7 +28,7 @@
 
         function tootle() {
             let TotalCases = m.map(row => row[5]);
-            console.log(TotalCases);
+
             //sisse eshitatud rehkendamine
             const summ = (previousValue, currentValue) => previousValue + currentValue; //prev ja current on muutujad, ise võin valida
             let summm = (TotalCases.reduce(summ)).toFixed(2);

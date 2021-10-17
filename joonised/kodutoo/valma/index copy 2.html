@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Terviseamtei avaandmed</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js"></script>
+    <script>
+
+
+
+        let array = []; //list
+        let obj = [
+            {
+                color: "red",
+                value: "#f00"
+            },
+            {
+                color: "green",
+                value: "#0f0"
+            },
+            {
+                color: "blue",
+                value: "#00f"
+            }
+        ]
+
+        var json_data = { "name": 1, "birth": 7 };
+        var result = [];
+
+        for (var i in json_data)
+            result.push([i, json_data.name[i]]);
+        console.log(result);
+
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows(result);
+
+
+
+        fetch("example.json").then(connection => connection.json()).
+            then(data => {
+                console.log(data); //objektid
+                for (let i = 0; i < data.length; i++) {
+                    m.push(data);
+                }
+
+
+            });
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

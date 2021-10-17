@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Terviseamtei avaandmed</title>
+
+    <script>
+
+        (async () => {
+            async function getJson() {
+                const url = "example.json";
+                const response = await fetch(url);
+                const dataFromJson = await response.json();
+                return dataFromJson;
+            }
+            const data = await getJson();
+            console.log(data);
+            //juhend: https://dev.to/ljnce/map-foreach-for-three-ways-for-create-an-array-and-push-it-4893
+
+            //LastStatisticsDate
+            let lsd = data.map(function (dataElements) {
+                return dataElements.LastStatisticsDate;
+            })
+            console.log(lsd);
+
+            //StatisticsDate
+            let sd = data.map(function (dataElements) {
+                return dataElements.StatisticsDate;
+            })
+            console.log(sd);
+
+            //DailyCases
+            let dc = data.map(function (dataElements) {
+                return dataElements.DailyCases
+            })
+            console.log(dc);
+
+            //TotalCases
+            let tc = data.map(function (dataElements) {
+                return dataElements.TotalCases
+            })
+            console.log(tc);
+
+            //TotalCasesLast14D
+            let tc14 = data.map(function (dataElements) {
+                return dataElements.TotalCasesLast14D
+            })
+            console.log(tc14);
+
+            //PerPopulation
+            let pp = data.map(function (dataElements) {
+                return dataElements.PerPopulation
+            })
+            console.log(pp);
+
+
+
+        })();
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

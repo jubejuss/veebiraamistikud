@@ -23,7 +23,9 @@
 					}
 					if (!puudu) { uued.push(m[i]); }
 				}
+
 				m = uued;
+				console.log(m);
 				tootle();
 			});
 
@@ -36,7 +38,7 @@
 		}
 
 		function temperatuuridKuudeKaupa() {
-			kt = _.range(13).map(element => []);
+			kt = _.range(13).map(element => []); //sellega defineerin 12-se tühja array
 			console.log(kt);
 			m.forEach(rida => kt[rida[0]].push(rida[5]));
 			ks = kt.map(kuu => _.sum(kuu));

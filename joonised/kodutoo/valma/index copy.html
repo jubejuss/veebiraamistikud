@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Terviseamtei avaandmed</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js"></script>
+    <script>
+
+        (async () => {
+            async function getJson() {
+                const url = "example.json";
+                const response = await fetch(url);
+                const dataFromJson = await response.json();
+                return dataFromJson;
+            }
+            const data = await getJson();
+            // console.log(data);
+
+            //juhend: https://dev.to/ljnce/map-foreach-for-three-ways-for-create-an-array-and-push-it-4893
+
+            //LastStatisticsDate
+            let lsd = data.map(function (dataElements) {
+                return dataElements.LastStatisticsDate;
+            })
+            // console.log(lsd);
+
+            //StatisticsDate
+            let sd = data.map(function (dataElements) {
+                return dataElements.StatisticsDate;
+            })
+            // console.log(sd);
+
+            //DailyCases
+            let dc = data.map(function (dataElements) {
+                return dataElements.DailyCases
+            })
+            console.log(dc);
+
+            //TotalCases
+            let tc = data.map(function (dataElements) {
+                return dataElements.TotalCases
+            })
+            // console.log(tc);
+
+            //TotalCasesLast14D
+            let tc14 = data.map(function (dataElements) {
+                return dataElements.TotalCasesLast14D
+            })
+            // console.log(tc14);
+
+            //PerPopulation
+            let pp = data.map(function (dataElements) {
+                return dataElements.PerPopulation
+            })
+            // console.log(pp);
+
+            let variable = dc;
+            const summ = (previousValue, currentValue) => previousValue + currentValue; //prev ja current on muutujad, ise võin valida
+            let summm = (variable.reduce(summ)).toFixed(2);
+            console.log("Summa: " + (variable.reduce(summ)).toFixed(2));
+
+            //rehkendamine graafiku tarbeks
+            //defineerin lodashiga tühja massiivi, milles 12 kohta
+            kt = _.range(13).map(element => []);
+            console.log(kt);
+            //defineerin vanilla js-ga tühja massiivi, milles 12 kohta(0-i ei kasuta)
+            const dataForChart = Array(13).fill(0).map(() => Array(0));
+            console.log(dataForChart);
+
+            dc.forEach(rida => kt[rida[0]].push(rida[6]));
+            console.log(kt);
+
+
+        })();
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

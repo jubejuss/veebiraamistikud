@@ -1,16 +1,51 @@
-<!DOCTYPE html>
-<html lang="et">
+<!doctype html>
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kodutöö</title>
+    <title>Terviseamtei avaandmed</title>
+
     <script>
-        fetch("example.json").then(connection => connection.json())
-            .then(data => {
+
+        let my_json = fetch("example.json").then(connection => connection.text()).
+            then(data => {
                 console.log(data);
-            })
+            });
+
+        console.log(my_json);
+
+        function tootle() {
+            let TotalCases = m.map(row => row[5]);
+
+            //sisse eshitatud rehkendamine
+            const summ = (previousValue, currentValue) => previousValue + currentValue; //prev ja current on muutujad, ise võin valida
+            let summm = (TotalCases.reduce(summ)).toFixed(2);
+            console.log("Summa: " + (TotalCases.reduce(summ)).toFixed(2));
+
+            const max = Math.max(...TotalCases);
+            console.log("maksimaalne: " + max)
+
+            const min = Math.min(...TotalCases);
+            console.log("minimaalne: " + min)
+
+            let avg = (summm / TotalCases.length).toFixed(2);
+            console.log("Keskmine: " + avg)
+            console.log(TotalCases.length);
+
+
+
+
+            temperatuuridKuudeKaupa();
+        }
+
+        function temperatuuridKuudeKaupa() {
+            kt = _.range(13).map(element => []);
+            console.log(kt);
+            m.forEach(row => kt[row[0]].push(row[5]));
+            ks = kt.map(kuu => _.sum(kuu));
+            kk = kt.map(kuu => _.sum(kuu) / kuu.length);
+
+            console.log("KK: " + kk);
+        }
     </script>
 </head>
 

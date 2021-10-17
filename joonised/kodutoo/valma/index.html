@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+
+    <script>
+
+
+
+        fetch('example.json').then(response => {
+            return response.json();
+        }).then(data => {
+            //make things with data
+            var labelsToChart = data.map(function (e) {
+                return e.StatisticsDate;
+            });
+            var dataToChart = data.map(function (e) {
+                return e.DailyCases;
+            });;
+
+            var ctx = canvas.getContext('2d');
+            var config = {
+                type: 'line',
+                data: {
+                    labels: labelsToChart,
+                    datasets: [{
+                        label: 'Juhtumid',
+                        data: dataToChart,
+                        backgroundColor: 'rgba(0, 119, 204, 0.3)'
+                    }]
+                }
+            };
+
+            var chart = new Chart(ctx, config);
+        });
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
