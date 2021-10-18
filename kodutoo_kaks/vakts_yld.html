@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="text/javascript"
+        src="https://gitcdn.link/cdn/schme16/Chart.js-RangeSlider/2dc49a0980ca04ca2690bc5f1c9e3644e4207b5a/dist/RangeSlider-all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <canvas id="canvas" width="500" height="300"></canvas>
+    </div>
+    <script>
+
+        // line chart data
+        fetch('vakts_yld.json').then(response => {
+            return response.json();
+        }).then(data => {
+            let labelsToChartRaw = data.map(function (e) {
+                return e.StatisticsDate;
+            });
+            let dataToChartRaw = data.map(function (e) {
+                return e.DailyCount;
+            });
+            console.log("daily: " + dataToChartRaw);
+
+            //filtering needable data
+            let fullVax = data.filter(d => d.VaccinationStatus === "Completed");
+            console.log("fullVax", fullVax);
+
+            let fullVaxChart = fullVax.map(function (e) {
+                return e.DailyCount;
+            })
+            console.log("complete", fullVaxChart);
+
+            let inProgressVax = data.filter(d => d.VaccinationStatus === "InProgress");
+            console.log(inProgressVax);
+
+            let inProgressVaxChart = inProgressVax.map(function (e) {
+                return e.DailyCount;
+            })
+            console.log("in progress", inProgressVaxChart);
+
+
+
+
+            let labelData = {
+                labels: labelsToChartRaw,
+                datasets: [{
+                    label: "Täistorgete arv",
+                    fillColor: "rgb(172,194,132)",
+                    strokeColor: "#C45662",
+                    pointColor: "#C45662",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "#C45662",
+                    //data from json
+                    data: fullVaxChart
+                },
+                {
+                    label: "Pooltorgete arv",
+                    fillColor: "rgb(172,194,132)",
+                    strokeColor: "#C45662",
+                    pointColor: "#C45662",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "#C45662",
+                    //data from json
+                    data: inProgressVaxChart
+                }]
+            };
+            // find array length to use for slider
+            let arrayLength = labelsToChartRaw.length;
+
+            // create the options
+            optionsCovid = {
+                scaleBeginAtZero: true,
+                /*This is how to customize the way the labels look :) */
+                tooltipTemplate: "<%if (label){%><%=label%>: <%}%>$<%= value %>",
+                label: 'Covid info',
+                responsive: true,
+            },
+                // get line chart canvas
+
+                dataChart = document.getElementById('canvas').getContext('2d')
+            dataMoveSlider = new RangeSliderChart({
+                chartData: labelData,
+                chartOpts: optionsCovid,
+                chartType: 'line',
+                chartCTX: dataChart,
+                //class: 'my-chart-ranger',
+                initial: [0, arrayLength]
+            })
+        });
+
+
+
+    </script>
+</body>
+
+</html>

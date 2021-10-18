@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <form method="GET" action="/joonised/kodutoo/valma/index_auto.html">
+        <select id="select-start" name="start"></select>
+        <select id="select-end" name="end"></select>
+        <input type="submit" value="Talla nüüd!">
+    </form>
+    <!-- <select onchange="selectStart()" id="select-start"></select>
+    <select onchange="selectEnd()" id="select-end"></select> -->
+    <p><span id="show-selected"></span><span id="show-selected-end"></span></p>
+    <script>
+        /* function selectStart() {
+            x = document.getElementById("select-start").value;
+            document.getElementById("show-selected").innerHTML = "Sa valisid alguse ajaks: " + x;
+            startDate = x;
+        };
+        function selectEnd() {
+            y = document.getElementById("select-end").value;
+            document.getElementById("show-selected-end").innerHTML = " ja lõpu ajaks: " + y;
+            endDate = y;
+        }; */
+
+        //määrame ajavahemikud
+
+        function findGetParameter(parameterName) {
+            let result = null,
+                tmp = [];
+            location.search
+                .substr(1)
+                .split("&")
+                .forEach(function (item) {
+                    tmp = item.split("=");
+                    if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+                });
+            return result;
+        }
+
+
+        //data
+        fetch('example.json').then(response => {
+            return response.json();
+        }).then(data => {
+            //make things with data
+
+            let startDate = findGetParameter('start');
+            let endDate = findGetParameter('end');
+
+            console.log("start: " + startDate);
+
+            //Tõmban jsonist StatisticsDate andmeveeru, seda kasutan siltideks
+            let labelsToChartRaw = data.map(function (e) {
+                return e.StatisticsDate;
+            });
+            // siin määran ära, mis vahemikus ma silte näitan
+            let labelsToChart = labelsToChartRaw.filter(function (value, index, arr) {
+                return value >= startDate && value <= endDate;
+            });
+            //indexi leidmiseks peab eraldi näituri nullima, muidu ta hakkab sellest otsima, mis parasjagu on määratud kuupäev
+            let labelsToChartIndex = labelsToChartRaw.filter(function (value, index, arr) {
+                return value > "0";
+            })
+            //panen massiivi pikkuse mutujasse, kuna sellega on tarvis tehteid teha
+            let arrayLength = labelsToChartRaw.length;
+            console.log("Massiivi pikkus: " + arrayLength);
+            console.log(labelsToChartRaw);
+            console.log(labelsToChart);
+            //määran stardiaja ja lõpuaja indexid, et nende abil allpool leida päevased juhtumid
+            const indexOfStart = labelsToChartIndex.findIndex(label => label === startDate);
+            console.log(indexOfStart);
+            const indexOfEnd = labelsToChartIndex.findIndex(label => label === endDate);
+            console.log(indexOfEnd);
+
+
+
+            let dataToChartRaw = data.map(function (e) {
+                return e.DailyCases;
+            });
+            //Siin rehkendatakse labeli baasilt välja, et näidataks sama koha datat 
+            let dataToChart = dataToChartRaw.filter(function (value, index, arr) {
+                return index >= indexOfStart && index <= indexOfEnd;
+            })
+            console.log(dataToChart);
+
+
+            let ctx = canvas.getContext('2d');
+            let config = {
+                type: 'line',
+                data: {
+                    labels: labelsToChart,
+                    datasets: [{
+                        label: 'Juhtumid',
+                        data: dataToChart,
+                        backgroundColor: 'rgba(0, 119, 204, 0.3)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+
+            let chart = new Chart(ctx, config);
+
+
+            //select
+
+            let selectStart = document.getElementById("select-start");
+            for (i in labelsToChartRaw) {
+                selectStart.options[selectStart.options.length] = new Option(labelsToChartRaw[i]);
+            }
+
+
+            // var select = document.getElementById("select-end");
+            // select.options[select.options.length] = new Option(labelsToChartRaw[index]);
+
+            let selectEnd = document.getElementById("select-end");
+            let selectEndReverse = labelsToChartRaw.reverse()
+
+            for (i in selectEndReverse) {
+                selectEnd.options[selectEnd.options.length] = new Option(selectEndReverse[i]);
+            }
+
+        });
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
