@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <select onchange="selectStart()" id="select-start"></select>
+    <select id="select-end"></select>
+    <p id="demo"></p>
+    <script>
+        function selectStart() {
+            x = document.getElementById("select-start").value;
+            document.getElementById("demo").innerHTML = "You selected: " + x;
+            startDate = x;
+            console.log(startDate);
+        };
+
+
+        //data
+        fetch('example.json').then(response => {
+            return response.json();
+        }).then(data => {
+            //make things with data
+
+            let startDate = "2020-04-29";
+            let endDate = "2021-10-15";
+
+            console.log("start: " + startDate);
+
+            //Tõmban jsonist StatisticsDate andmeveeru, seda kasutan siltideks
+            let labelsToChartRaw = data.map(function (e) {
+                return e.StatisticsDate;
+            });
+            // siin määran ära, mis vahemikus ma silte näitan
+            let labelsToChart = labelsToChartRaw.filter(function (value, index, arr) {
+                return value >= startDate && value <= endDate;
+            });
+            //indexi leidmiseks peab eraldi näituri nullima, muidu ta hakkab sellest otsima, mis parasjagu on määratud kuupäev
+            let labelsToChartIndex = labelsToChartRaw.filter(function (value, index, arr) {
+                return value > "0";
+            })
+            //panen massiivi pikkuse mutujasse, kuna sellega on tarvis tehteid teha
+            let arrayLength = labelsToChartRaw.length;
+            console.log("Massiivi pikkus: " + arrayLength);
+            console.log(labelsToChartRaw);
+            console.log(labelsToChart);
+            //määran stardiaja ja lõpuaja indexid, et nende abil allpool leida päevased juhtumid
+            const indexOfStart = labelsToChartIndex.findIndex(label => label === startDate);
+            console.log(indexOfStart);
+            const indexOfEnd = labelsToChartIndex.findIndex(label => label === endDate);
+            console.log(indexOfEnd);
+
+
+
+            let dataToChartRaw = data.map(function (e) {
+                return e.DailyCases;
+            });
+            //Siin rehkendatakse labeli baasilt välja, et näidataks sama koha datat 
+            let dataToChart = dataToChartRaw.filter(function (value, index, arr) {
+                return index >= indexOfStart && index <= indexOfEnd;
+            })
+            console.log(dataToChart);
+
+
+            let ctx = canvas.getContext('2d');
+            let config = {
+                type: 'line',
+                data: {
+                    labels: labelsToChart,
+                    datasets: [{
+                        label: 'Juhtumid',
+                        data: dataToChart,
+                        backgroundColor: 'rgba(0, 119, 204, 0.3)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+
+            let chart = new Chart(ctx, config);
+
+
+            //select
+            var select = document.getElementById("select-start");
+            select.options[select.options.length] = new Option('Vali alguse aeg');
+
+            var select = document.getElementById("select-start");
+            for (index in labelsToChartRaw) {
+                select.options[select.options.length] = new Option(labelsToChartRaw[index], index);
+            }
+            var select = document.getElementById("select-end");
+            select.options[select.options.length] = new Option('Vali lõpu aeg');
+
+            var select = document.getElementById("select-end");
+            for (index in labelsToChartRaw) {
+                select.options[select.options.length] = new Option(labelsToChartRaw[index], index);
+            }
+        });
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>
