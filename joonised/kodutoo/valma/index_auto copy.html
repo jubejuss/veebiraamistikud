@@ -12,40 +12,16 @@
 
 <body>
     <canvas id="canvas"></canvas>
-    <form method="GET" action="/joonised/kodutoo/valma/index_auto.html">
-        <select id="select-start" name="start"></select>
-        <select id="select-end" name="end"></select>
-        <input type="submit" value="Talla nüüd!">
-    </form>
-    <!-- <select onchange="selectStart()" id="select-start"></select>
-    <select onchange="selectEnd()" id="select-end"></select> -->
-    <p><span id="show-selected"></span><span id="show-selected-end"></span></p>
+    <select onchange="selectStart()" id="select-start"></select>
+    <select id="select-end"></select>
+    <p id="demo"></p>
     <script>
-        /* function selectStart() {
+        function selectStart() {
             x = document.getElementById("select-start").value;
-            document.getElementById("show-selected").innerHTML = "Sa valisid alguse ajaks: " + x;
+            document.getElementById("demo").innerHTML = "You selected: " + x;
             startDate = x;
+            console.log(startDate);
         };
-        function selectEnd() {
-            y = document.getElementById("select-end").value;
-            document.getElementById("show-selected-end").innerHTML = " ja lõpu ajaks: " + y;
-            endDate = y;
-        }; */
-
-        //määrame ajavahemikud
-
-        function findGetParameter(parameterName) {
-            let result = null,
-                tmp = [];
-            location.search
-                .substr(1)
-                .split("&")
-                .forEach(function (item) {
-                    tmp = item.split("=");
-                    if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
-                });
-            return result;
-        }
 
 
         //data
@@ -54,8 +30,8 @@
         }).then(data => {
             //make things with data
 
-            let startDate = findGetParameter('start');
-            let endDate = findGetParameter('end');
+            let startDate = "2020-02-26";
+            let endDate = "2021-10-15";
 
             console.log("start: " + startDate);
 
@@ -118,23 +94,20 @@
 
 
             //select
+            var select = document.getElementById("select-start");
+            select.options[select.options.length] = new Option('Vali alguse aeg');
 
-            let selectStart = document.getElementById("select-start");
-            for (i in labelsToChartRaw) {
-                selectStart.options[selectStart.options.length] = new Option(labelsToChartRaw[i]);
+            var select = document.getElementById("select-start");
+            for (index in labelsToChartRaw) {
+                select.options[select.options.length] = new Option(labelsToChartRaw[index]);
             }
+            var select = document.getElementById("select-end");
+            select.options[select.options.length] = new Option('Vali lõpu aeg');
 
-
-            // var select = document.getElementById("select-end");
-            // select.options[select.options.length] = new Option(labelsToChartRaw[index]);
-
-            let selectEnd = document.getElementById("select-end");
-            let selectEndReverse = labelsToChartRaw.reverse()
-
-            for (i in selectEndReverse) {
-                selectEnd.options[selectEnd.options.length] = new Option(selectEndReverse[i]);
+            var select = document.getElementById("select-end");
+            for (index in labelsToChartRaw) {
+                select.options[select.options.length] = new Option(labelsToChartRaw[index], index);
             }
-
         });
 
 
