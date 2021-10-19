@@ -29,7 +29,8 @@
                 return e.DailyCount;
             });
             console.log("daily: " + dataToChartRaw);
-
+            //Remove doubles from array
+            let labelsToChartUnique = [...new Set(labelsToChartRaw)];
             //filtering needable data
             let fullVax = data.filter(d => d.VaccinationStatus === "Completed");
             console.log("fullVax", fullVax);
@@ -51,10 +52,11 @@
 
 
             let labelData = {
-                labels: labelsToChartRaw,
+                labels: labelsToChartUnique,
                 datasets: [{
                     label: "Täistorgete arv",
-                    fillColor: "rgb(172,194,132)",
+                    backgroundColor: "rgba(255, 0, 0, .3",
+                    fillColor: "#e72727",
                     strokeColor: "#C45662",
                     pointColor: "#C45662",
                     pointStrokeColor: "#fff",
@@ -65,6 +67,7 @@
                 },
                 {
                     label: "Pooltorgete arv",
+                    backgroundColor: "rgba( 0, 0,255, .3",
                     fillColor: "rgb(172,194,132)",
                     strokeColor: "#C45662",
                     pointColor: "#C45662",
