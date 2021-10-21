@@ -14,6 +14,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.min.js"></script>
 
 
+
 </head>
 
 <body>
@@ -24,13 +25,15 @@
 
     <script>
         // line chart data
-        fetch('vakts_yld.json').then(response => {
+        const url = 'http://localhost:4000/tervis';
+
+        fetch(url).then(response => {
             return response.json();
         }).then(jsonData => {
-            let labelsToChartRaw = jsonData.map(function (e) {
+            let labelsToChartRaw = jsonData.health.map(function (e) {
                 return e.StatisticsDate;
             });
-            let dataToChartRaw = jsonData.map(function (e) {
+            let dataToChartRaw = jsonData.health.map(function (e) {
                 return e.DailyCount;
             });
             console.log("daily: " + dataToChartRaw);
