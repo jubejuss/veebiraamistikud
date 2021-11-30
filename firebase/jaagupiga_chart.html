@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Temperatuurid</title>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js";
+        import { getDatabase, ref, push, set, get, onValue, child } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-database.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyCaGEyIQLvMPrLETFXpUMpsy_eAS5kEuPM",
+            authDomain: "jaaguphkraamistikud21.firebaseapp.com",
+            databaseURL: "https://jaaguphkraamistikud21-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "jaaguphkraamistikud21",
+            storageBucket: "jaaguphkraamistikud21.appspot.com",
+            messagingSenderId: "278325228518",
+            appId: "1:278325228518:web:9b2fb94a35dc06a9431c27"
+        };
+        //ref = firebase.database().ref("dinosaurs");
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const kataloog = ref(db, "temperatuurid");
+        window.muutus = function (vaartus) {
+            set(ref(db, "temperatuurid/juhokalberg"), parseInt(vaartus));
+        }
+        onValue(kataloog, kuva);
+        function kuva(viit) {
+            let andmed = viit.val();
+            console.log(andmed);
+            joonis.data.labels = Object.keys(andmed);
+            joonis.data.datasets[0].data = Object.values(andmed);
+            joonis.update();
+        }
+
+        let joonis = null;
+        window.onload = function () {
+            joonis = new Chart(document.getElementById("joonisekiht"), {
+                type: 'line',
+                data: {
+                    labels: ['Juku', 'Kati', 'Mati'],
+                    datasets: [
+                        {
+                            label: 'temperatuurid',
+                            data: [170, 175, 172],
+                            backgroundColor: "red"
+                        }
+                    ]
+                }
+            })
+        }
+
+    </script>
+</head>
+
+<body>
+    <input type="range" min="15" max="35" value="21" id="riba1" onchange="muutus(this.value)" />
+    Tehke lehele tulpdiagramm, kus on näha iga kasutaja temperatuur
+    <div style="width: 800px; height:300px">
+        <canvas id="joonisekiht"></canvas>
+    </div>
+
+</body>
+
+</html>

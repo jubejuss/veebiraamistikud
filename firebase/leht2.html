@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase</title>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-database.js";
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTaqkf8-g-SuWqnafoqtWHeQslglfSJyQ",
+            authDomain: "jubejusshkraamistikud21.firebaseapp.com",
+            databaseURL: "https://jubejusshkraamistikud21-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "jubejusshkraamistikud21",
+            storageBucket: "jubejusshkraamistikud21.appspot.com",
+            messagingSenderId: "965256577278",
+            appId: "1:965256577278:web:b5eed2fc56940a1380a5af"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const kataloog = ref(db, "teated");
+        window.lisaTeade = function (teade) {
+            const uuskoht = push(kataloog);
+            set(uuskoht, teade); // kuhu kohta ja mida
+            //näide kuidas identifikaatoreid ise lisada:
+            //set(ref(db, "teated/teade4"), "kapsas");
+            kast1.value = ""; //see tühjendab kasti
+        }
+
+        onValue(kataloog, kuva);
+        function kuva(viit) {
+            let andmed = viit.val();
+            console.log(andmed);
+            let votmed = Object.keys(andmed);
+            let tulemus = "";
+            for (let i = 0; i < votmed.length; i++) {
+                tulemus += andmed[votmed[i]] +
+                    " <input type='button' value='X' onclick='kustuta(\"" + votmed[i] + "\")'/> <br />";
+            }
+            kiht1.innerHTML = tulemus;
+        }
+
+        window.kustuta = function (kood) {
+            if (window.confirm("Kas kustutada?")) {
+                set(ref(db, "teated/" + kood), null);
+            }
+        }
+            ;</script>
+</head>
+
+<body>
+    Sisesta teade:
+    <input type="text" id="kast1" />
+    <input type="button" value="OK" onclick="lisaTeade(kast1.value)" />
+    <div id="kiht1"></div>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase</title>
+    <script type="module">
+        // add firebase to your project
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js";
+        // add your firebase DB to your project
+        import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-database.js";
+        // Your app conf
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTaqkf8-g-SuWqnafoqtWHeQslglfSJyQ",
+            authDomain: "jubejusshkraamistikud21.firebaseapp.com",
+            databaseURL: "https://jubejusshkraamistikud21-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "jubejusshkraamistikud21",
+            storageBucket: "jubejusshkraamistikud21.appspot.com",
+            messagingSenderId: "965256577278",
+            appId: "1:965256577278:web:b5eed2fc56940a1380a5af"
+        };
+        // Firebase setup
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const myData = ref(db, "korraspaev");
+        window.addState = function (state) {
+            const addData = push(myData);
+            set(addData, state);
+
+
+        }
+
+        onValue(myData, display);
+        function display(refer) {
+            let data = refer.val();
+            console.log(data);
+            let keys = Object.keys(data);
+            let result = "";
+            for (let i = 0; i < keys.length; i++) {
+                result += data[keys[i]] + "<br />";
+            }
+            layer.innerHTML = result;
+        };
+    </script>
+</head>
+
+<body>
+    Sisesta state:
+    <input type="text" id="input" />
+    <input type="button" value="OK" onclick="addState(input.value)" />
+    <div id="layer"></div>
+</body>
+
+</html>

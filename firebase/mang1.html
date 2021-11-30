@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase</title>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        import { getDatabase, ref, push, set, get, onValue, child } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-database.js";
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTaqkf8-g-SuWqnafoqtWHeQslglfSJyQ",
+            authDomain: "jubejusshkraamistikud21.firebaseapp.com",
+            databaseURL: "https://jubejusshkraamistikud21-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "jubejusshkraamistikud21",
+            storageBucket: "jubejusshkraamistikud21.appspot.com",
+            messagingSenderId: "965256577278",
+            appId: "1:965256577278:web:b5eed2fc56940a1380a5af"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const kataloog = ref(db, "mangud");
+        window.mangijanimi = "mangija" + parseInt(10000 * Math.random());
+        let manguObj = null;
+        get(kataloog).then((sisend) => {
+            let m = sisend.val();
+            let votmed = Object.keys(m);
+            let leitud = null;
+            for (let i = 0; i < votmed.length; i++) {
+                if (m[votmed[i]].mangija2 == "puudub") {
+                    leitud = votmed[i];
+                }
+            }
+            console.log(leitud);
+            if (leitud != null) {
+                manguObj = ref(db, "mangud/" + leitud);
+                onValue(manguObj, kuvaMang);
+                set(ref(db, "mangud/" + leitud + "/mangija2"), window.mangijanimi);
+            } else {
+                manguObj = push(kataloog);
+                onValue(manguObj, kuvaMang);
+                set(child(manguObj, "mangija1"), window.mangijanimi);
+                set(child(manguObj, "mangija2"), "puudub");
+                set(child(manguObj, "laud"), ".........")
+            }
+            onValue(manguObj, kuvaMang);
+        });
+
+        function kuvaMang(viit) {
+            let m = viit.val();
+            spm1.innerText = m.mangija1;
+            spm2.innerText = m.mangija2;
+            console.log(m);
+        }
+
+
+
+    </script>
+</head>
+
+<body>
+    Mängivad <span id="spm1"></span> ja <span id="spm2"></span>
+</body>
+
+</html>

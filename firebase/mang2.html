@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase</title>
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js";
+
+        import { getDatabase, ref, push, set, get, onValue, child } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTaqkf8-g-SuWqnafoqtWHeQslglfSJyQ",
+            authDomain: "jubejusshkraamistikud21.firebaseapp.com",
+            databaseURL: "https://jubejusshkraamistikud21-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "jubejusshkraamistikud21",
+            storageBucket: "jubejusshkraamistikud21.appspot.com",
+            messagingSenderId: "965256577278",
+            appId: "1:965256577278:web:b5eed2fc56940a1380a5af"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const kataloog = ref(db, "mangud");
+        window.mangijanimi = "mangija" + parseInt(10000 * Math.random());
+        let manguObj = null;
+        get(kataloog).then((sisend) => {
+            let m = sisend.val();
+            let votmed = Object.keys(m);
+            let leitud = null;
+            for (let i = 0; i < votmed.length; i++) {
+                if (m[votmed[i]].mangija2 == "puudub") {
+                    leitud = votmed[i];
+                }
+            }
+            console.log(leitud);
+            if (leitud != null) {
+                manguObj = ref(db, "mangud/" + leitud);
+                onValue(manguObj, kuvaMang);
+                set(ref(db, "mangud/" + leitud + "/mangija2"), window.mangijanimi);
+                spmina.innerText = "0";
+            } else {
+                manguObj = push(kataloog);
+                onValue(manguObj, kuvaMang);
+                set(child(manguObj, "mangija1"), window.mangijanimi);
+                set(child(manguObj, "mangija2"), "puudub");
+                set(child(manguObj, "laud"), ".........");
+                //Lisage kataloog teadete jaoks
+                //kumbki mängija saab vabalt teateid postitada
+                // teated kuvatakse nende omavahjelise mängu lehel
+
+                spmina.innerText = "X";
+            }
+            onValue(manguObj, kuvaMang);
+        });
+
+
+        let m = null;
+
+        function kuvaMang(viit) {
+            m = viit.val();
+            spm1.innerText = m.mangija1;
+            spm2.innerText = m.mangija2;
+            console.log(m);
+
+            let g = tahvel1.getContext("2d");
+            g.clearRect(0, 0, 300, 300);
+            for (let rida = 0; rida < 3; rida++) {
+                for (let veerg = 0; veerg < 3; veerg++) {
+                    g.font = "60px Arial";
+                    g.fillText(m.laud[rida * 3 + veerg], veerg * 100 + 50, rida * 100 + 50);
+                }
+            }
+            // teated
+            if (m.teated) {
+                console.log(Object.values(m.teated));
+                //kiht2.innerHTML = Object.values(m.teated).join("<br />");
+                // tagurpidi
+                let t = Object.values(m.teated);
+                t.reverse();
+                kiht2.innerHTML = t.join("<br />");
+            }
+        }
+
+        function kelleKord() {
+            let loendur = 0;
+            for (let i = 0; i < m.laud.length; i++) {
+                if (m.laud[i] == ".") { loendur++; }
+            }
+
+            if (loendur % 2 == 0) { return "0" }
+            return "X";
+        }
+
+        window.vajutus = function (e) {
+            if (kelleKord() != spmina.innerText) {
+                alert("Vastase kord!");
+                return
+            }
+            console.log(e);
+            console.log(e.layerX, e.layerY);
+            //kuvage välja rea ja veeru number
+            console.log(Math.floor(e.layerY / 100));
+            console.log(Math.floor(e.layerX / 100));
+            let koht = Math.floor(e.layerY / 100) * 3 + (Math.floor(e.layerX / 100));
+            console.log(koht, m.laud[koht]);
+
+            //Kirjutage uus string serverisse
+            if (m.laud[koht] == "X" || m.laud[koht] == "0") {
+                alert("Sa ei saa käia kui siia on juba keegi käinud!");
+
+            } else if (m.laud[koht] == ".") {
+                let uus = m.laud.substring(0, koht) + spmina.innerText + m.laud.substring(koht + 1);
+                console.log(uus);
+                set(child(manguObj, "laud"), uus);
+            }
+
+
+            // võidu kombinatsioonid: 123, 456, 789, 147, 258, 369, veel
+        }
+
+        //lisame teate
+        window.lisaTeade = function (teade) {
+            set(push(child(manguObj, "teated")), teade);
+        }
+
+
+
+    </script>
+</head>
+
+<body>
+    X = <span id="spm1"></span> ja 0 = <span id="spm2"></span>
+    Mina olen <span id="spmina"></span>
+    <canvas id="tahvel1" width="300" height="300" onclick="vajutus(event)"></canvas>
+
+    <p> Saada teade:</p>
+    <textarea name="Text1" type=# id="kast1" cols="40" rows="5"></textarea>
+    <input type="button" value="OK" onclick="lisaTeade(kast1.value)" />
+    <div id="kiht2"></div>
+</body>
+
+</html>

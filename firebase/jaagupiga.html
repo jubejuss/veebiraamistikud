@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase</title>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-database.js";
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCaGEyIQLvMPrLETFXpUMpsy_eAS5kEuPM",
+            authDomain: "jaaguphkraamistikud21.firebaseapp.com",
+            databaseURL: "https://jaaguphkraamistikud21-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "jaaguphkraamistikud21",
+            storageBucket: "jaaguphkraamistikud21.appspot.com",
+            messagingSenderId: "278325228518",
+            appId: "1:278325228518:web:9b2fb94a35dc06a9431c27"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        window.muutus = function (vaartus) {
+            set(ref(db, "temperatuurid/juhokalberg"), parseInt(vaartus));
+        }
+
+    </script>
+</head>
+
+<body>
+
+</body>
+<input type="range" id="riba1" min="5" max="35" onchange="muutus(this.value)" />
+<!-- siin öeldakse, et võta siitsamast väärtus-->
+
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Kaart</title>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" />
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        img {
+            border: 0;
+        }
+
+        #kaardikiht {
+            float: bottom;
+            width: 80%;
+            height: 80%;
+        }
+    </style>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js";
+        import {
+            getDatabase,
+            ref,
+            push,
+            set,
+            get,
+            onValue,
+            child,
+            remove,
+        } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-database.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCWFyiMpgcFQxoKZPX6FjREpfq-6mBqw4",
+            authDomain: "heigohkraamistikud2021.firebaseapp.com",
+            databaseURL:
+                "https://heigohkraamistikud2021-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "heigohkraamistikud2021",
+            storageBucket: "heigohkraamistikud2021.appspot.com",
+            messagingSenderId: "135042306581",
+            appId: "1:135042306581:web:6210cbd7e34f7873fef41c",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const kataloog = ref(db, "markerid");
+        const kataloog2 = ref(db, "puhastused");
+
+        let marker = null;
+        let kaart = null;
+        let lat = null;
+        let lng = null;
+        window.onload = function () {
+            kaart = L.map("kaardikiht").setView([58.935389, 23.541985], 10);
+            kiht2.innerHTML = "Markeri tekitamiseks klõpsa kaardil.";
+            kaart.on("click", lisa);
+        };
+
+        window.lisa = function (e) {
+            get(kataloog).then((sisend) => {
+                let m = sisend.val();
+                let mArv = Object.keys(m).length + 1;
+                let klikkLat = e.latlng.lat;
+                let klikkLng = e.latlng.lng;
+                set(ref(db, "markerid/marker" + mArv + "/lat"), klikkLat);
+                set(ref(db, "markerid/marker" + mArv + "/lng"), klikkLng);
+            });
+        };
+
+        function kuva(viit) {
+            let andmed = viit.val();
+            for (let i = 0; i < Object.values(andmed).length; i++) {
+                let suvalineVarv = Math.floor(Math.random() * 16777215).toString(16);
+                let suvalineSuurus = Math.floor(Math.random() * 15) + 5;
+                marker = L.circleMarker(
+                    [Object.values(andmed)[i].lat, Object.values(andmed)[i].lng],
+                    { color: "#" + suvalineVarv, radius: suvalineSuurus }
+                );
+                kaart.addLayer(marker);
+            }
+        }
+
+        window.nupuVajutus = function () {
+
+            get(kataloog).then((sisend) => {
+                let m = sisend.val();
+                let kokku = Object.keys(m).length + 1;
+                for (let i = 2; i < kokku; i++) {
+                    remove(ref(db, "markerid/marker" + i));
+                }
+            });
+
+            get(kataloog2).then((sisend) => {
+                let puhastatudKordi = parseInt(Object.values(sisend.val()));
+                puhastatudKordi += 1;
+                set(ref(db, "puhastused/puhastatud"), puhastatudKordi);
+            });
+
+
+        }
+
+        function puhasta() {
+            kaart.eachLayer(function (layer) {
+                kaart.removeLayer(layer);
+            });
+            new L.TileLayer(
+                "https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{y}.png&ASUTUS=TLU&ERIALA=RAKENDUSINFORMAATIKA",
+                {
+                    attribution:
+                        "Map: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+                    tms: true,
+                }
+            ).addTo(kaart);
+            let marker1Lat = ref(db, "markerid/marker1/lat");
+            onValue(marker1Lat, (snapshot) => {
+                lat = snapshot.val();
+            });
+
+            let marker1Lng = ref(db, "markerid/marker1/lng");
+            onValue(marker1Lng, (snapshot) => {
+                lng = snapshot.val();
+            });
+            marker = L.circleMarker([lat, lng], { color: "#4AFF00", radius: 10 });
+            kaart.addLayer(marker);
+
+        }
+
+        onValue(kataloog2, puhasta);
+        onValue(kataloog, kuva);
+
+    </script>
+</head>
+
+<body>
+    <div id="kaardikiht"></div>
+    <div id="kiht2"></div>
+    <br />
+    <input type="button" value="Puhasta kaart" onclick="nupuVajutus()" />
+</body>
+
+</html>
