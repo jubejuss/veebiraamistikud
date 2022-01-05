@@ -28,11 +28,11 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase();
         const myData = ref(db, "korraspaev");
-        window.addState = function (state) {
+        window.addState = function (score, date) {
             const addData = push(myData);
-            // set(addData, state); // see lisab ühe väärtuse baasi
-
-            set(addData, { "sisu": state, "kirjeldus": "abc" }); // see lisab mitu väärtust baasi
+            set(addData, { "skoor": score, "kuupaev": date });
+            document.getElementById('date').value = '';
+            document.getElementById('score').value = '5';
         }
 
 
@@ -41,34 +41,31 @@
         onValue(myData, display);
         function display(refer) {
             let data = refer.val();
-            console.log(data);
-            let keys = Object.keys(data);
-            let result = "";
-            for (let i = 0; i < keys.length; i++) {
-                result += data[keys[i]] + "<br />";
-            }
+
+            let objectsArray = Object.values(data);
+            console.log("otsitav" + objectsArray);
+            let skoor = objectsArray.map(item => item.skoor);
+            // konverdime numbriteks
+            skoor = skoor.map(Number);
+            console.log(skoor);
+            let kuupaev = objectsArray.map(item => item.kuupaev);
 
 
-            let counter = 1;
-            while (counter <= keys.length) {
-                counter = counter + 1;
-            }
-            console.log(counter);
-            // for showing result in page
-            graph.data.labels = Object.keys(data);
-            graph.data.datasets[0].data = Object.values(data);
-            // 
+            graph.data.labels = kuupaev; // leibelid
+            graph.data.datasets[0].data = skoor;
+
+
+            console.log(Object.values(data));
+
             graph.update();
         };
-
-
 
         let graph = null;
         window.onload = function () {
             graph = new Chart(document.getElementById("chart"), {
                 type: 'line',
                 data: {
-                    labels: ['Juku', 'Kati', 'Mati'],
+                    labels: [],
                     datasets: [
                         {
                             label: 'Korras päev',
@@ -86,14 +83,16 @@
         <h1 class="text-center" style="margin-top: 10px;">Milline su päev täna oli?</h1>
         <label for="day">Vali 5-palli skaalal sobiv:</label>
         <div>
-            <select name="day" id="input">
+            <select name="day" id="score">
+                <option value="0">Vali</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
             </select>
-            <input type="button" value="OK" onclick="addState(input.value)" />
+            <input type="date" id="date" />
+            <input type="button" value="OK" inputValue="" onclick="addState(score.value, date.value)" />
             <div id="layer"></div>
             <div style="width: 100%;">
                 <canvas id="chart"></canvas>

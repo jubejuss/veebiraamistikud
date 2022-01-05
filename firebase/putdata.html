@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import {
+            getDatabase,
+            ref,
+            set,
+        } from 'https://www.gstatic.com/firebasejs/9.2.0/firebase-database.js';
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: 'AIzaSyBTaqkf8-g-SuWqnafoqtWHeQslglfSJyQ',
+            authDomain: 'jubejusshkraamistikud21.firebaseapp.com',
+            databaseURL:
+                'https://jubejusshkraamistikud21-default-rtdb.europe-west1.firebasedatabase.app',
+            projectId: 'jubejusshkraamistikud21',
+            storageBucket: 'jubejusshkraamistikud21.appspot.com',
+            messagingSenderId: '965256577278',
+            appId: '1:965256577278:web:b5eed2fc56940a1380a5af',
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+    </script>
+
+</head>
+
+<body>
+    <div>
+        <input type="date" id="datebox" />
+        <input type="text" placeholder="scorebox" />
+        <button id="insertbtn">
+            Saada
+        </button>
+    </div>
+    <script type="text/javascript">
+
+        //------------add data-----------------//
+
+        const dateBox = document.getElementById('datebox');
+        const scoreBox = document.getElementById('scorebox');
+
+        const writeEventData = (date) => {
+            const db = getDatabase();
+            set(ref(db, 'korraspaev'), {
+                date: dateBox,
+            });
+        };
+
+        const insertBtn = document.getElementById('insertbtn');
+        insertBtn.addEventListener('click', writeEventData);
+
+        //-----------------insert button action----------------//
+
+
+
+    </script>
+</body>
+
+</html>
